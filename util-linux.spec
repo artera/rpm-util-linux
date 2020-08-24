@@ -52,14 +52,12 @@ Source1: util-linux-login.pamd
 Source2: util-linux-remote.pamd
 Source3: util-linux-chsh-chfn.pamd
 Source4: util-linux-60-raw.rules
-Source5: adjtime.conf
 Source12: util-linux-su.pamd
 Source13: util-linux-su-l.pamd
 Source14: util-linux-runuser.pamd
 Source15: util-linux-runuser-l.pamd
 
 ### Obsoletes & Conflicts & Provides
-Conflicts: initscripts < 9.79-4
 Conflicts: bash-completion < 1:2.1-1
 # su(1) and runuser(1) merged into util-linux v2.22
 Conflicts: coreutils < 8.20
@@ -69,9 +67,6 @@ Provides: eject = 2.1.6
 # rfkill has been merged into util-linux v2.31
 Obsoletes: rfkill <= 0.5
 Provides: rfkill = 0.5
-# sulogin, utmpdump merged into util-linux v2.22;
-# last, lastb merged into util-linux v2.24
-Conflicts: sysvinit-tools < 2.88-14
 # old versions of e2fsprogs contain fsck, uuidgen
 Conflicts: e2fsprogs < 1.41.8-5
 # rename from util-linux-ng back to util-linux
@@ -403,6 +398,11 @@ chmod 0664 ${RPM_BUILD_ROOT}/var/log/lastlog
 # install util-linux
 make install DESTDIR=${RPM_BUILD_ROOT}
 
+# conflicts with older sysvinit-tools
+rm -f $RPM_BUILD_ROOT%{_bindir}/{last,mesg,wall}
+rm -f $RPM_BUILD_ROOT%{_mandir}/man1/{last,mesg,wall}.1
+rm -f $RPM_BUILD_ROOT%{compldir}/{last,mesg,wall}
+
 # raw
 echo '.so man8/raw.8' > $RPM_BUILD_ROOT%{_mandir}/man8/rawdevices.8
 {
@@ -419,9 +419,6 @@ mv ${RPM_BUILD_ROOT}%{_sbindir}/raw ${RPM_BUILD_ROOT}%{_bindir}/raw
 # And a dirs uuidd needs that the makefiles don't create
 install -d ${RPM_BUILD_ROOT}/run/uuidd
 install -d ${RPM_BUILD_ROOT}/var/lib/libuuid
-
-# /etc/adjtime
-install -m 644 %{SOURCE5} ${RPM_BUILD_ROOT}%{_sysconfdir}/adjtime
 
 # libtool junk
 rm -rf ${RPM_BUILD_ROOT}%{_libdir}/*.la
@@ -589,8 +586,6 @@ fi
 %config(noreplace)	%{_sysconfdir}/pam.d/runuser-l
 %config(noreplace)	%{_prefix}/lib/udev/rules.d/60-raw.rules
 
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/adjtime
-
 %attr(4755,root,root)	%{_bindir}/mount
 %attr(4755,root,root)	%{_bindir}/umount
 %attr(4755,root,root)	%{_bindir}/su
@@ -623,7 +618,6 @@ fi
 %{_bindir}/ipcs
 %{_bindir}/isosize
 %{_bindir}/kill
-%{_bindir}/last
 %{_bindir}/lastb
 %{_bindir}/logger
 %{_bindir}/look
@@ -635,7 +629,6 @@ fi
 %{_bindir}/lsmem
 %{_bindir}/lsns
 %{_bindir}/mcookie
-%{_bindir}/mesg
 %{_bindir}/more
 %{_bindir}/mountpoint
 %{_bindir}/namei
@@ -657,7 +650,6 @@ fi
 %{_bindir}/utmpdump
 %{_bindir}/uuidgen
 %{_bindir}/uuidparse
-%{_bindir}/wall
 %{_bindir}/wdctl
 %{_bindir}/whereis
 %{_mandir}/man1/cal.1*
@@ -678,7 +670,6 @@ fi
 %{_mandir}/man1/ipcrm.1*
 %{_mandir}/man1/ipcs.1*
 %{_mandir}/man1/kill.1*
-%{_mandir}/man1/last.1*
 %{_mandir}/man1/lastb.1*
 %{_mandir}/man1/logger.1*
 %{_mandir}/man1/login.1*
@@ -688,7 +679,6 @@ fi
 %{_mandir}/man1/lslogins.1*
 %{_mandir}/man1/lsmem.1*
 %{_mandir}/man1/mcookie.1*
-%{_mandir}/man1/mesg.1*
 %{_mandir}/man1/more.1*
 %{_mandir}/man1/mountpoint.1*
 %{_mandir}/man1/namei.1*
@@ -710,7 +700,6 @@ fi
 %{_mandir}/man1/utmpdump.1.gz
 %{_mandir}/man1/uuidgen.1*
 %{_mandir}/man1/uuidparse.1*
-%{_mandir}/man1/wall.1*
 %{_mandir}/man1/whereis.1*
 %{_mandir}/man1/write.1*
 %{_mandir}/man5/fstab.5*
@@ -833,7 +822,6 @@ fi
 %{compldir}/ipcrm
 %{compldir}/ipcs
 %{compldir}/isosize
-%{compldir}/last
 %{compldir}/ldattach
 %{compldir}/logger
 %{compldir}/look
@@ -846,7 +834,6 @@ fi
 %{compldir}/lsmem
 %{compldir}/lsns
 %{compldir}/mcookie
-%{compldir}/mesg
 %{compldir}/mkfs
 %{compldir}/mkfs.cramfs
 %{compldir}/mkfs.minix
@@ -883,7 +870,6 @@ fi
 %{compldir}/utmpdump
 %{compldir}/uuidgen
 %{compldir}/uuidparse
-%{compldir}/wall
 %{compldir}/wdctl
 %{compldir}/whereis
 %{compldir}/wipefs
