@@ -719,7 +719,6 @@ fi
 %{_mandir}/man8/agetty.8*
 %{_mandir}/man8/blkdiscard.8*
 %{_mandir}/man8/blkid.8*
-%{_mandir}/man8/blkzone.8*
 %{_mandir}/man8/blockdev.8*
 %{_mandir}/man8/chcpu.8*
 %{_mandir}/man8/chmem.8*
@@ -767,7 +766,6 @@ fi
 %{_sbindir}/agetty
 %{_sbindir}/blkdiscard
 %{_sbindir}/blkid
-%{_sbindir}/blkzone
 %{_sbindir}/blockdev
 %{_sbindir}/chcpu
 %{_sbindir}/ctrlaltdel
@@ -804,7 +802,6 @@ fi
 %{compldir}/addpart
 %{compldir}/blkdiscard
 %{compldir}/blkid
-%{compldir}/blkzone
 %{compldir}/blockdev
 %{compldir}/cal
 %{compldir}/chcpu
